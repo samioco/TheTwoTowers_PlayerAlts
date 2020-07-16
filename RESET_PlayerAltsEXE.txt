@@ -1,4 +1,4 @@
-#CLASS 0
+//RESET_PlayerAltsEXE#CLASS 0#AL RESET_PlayerAltsEXE {#CLASS 0
 $CLASS = "Tools|PlayerAlts"
 
 #AL ShowAllAlts {
@@ -39,7 +39,7 @@ $formatted_entry=""
 }
 ShowLine 100
 }
-} $CLASS
+} $CLASS 
 
 #AL AddAlt {
 //Param: list of playernames
@@ -119,7 +119,7 @@ ShowLine 100
   #ADDI $Edited_Entries $player_list
   #ECHO Deleting Item: %i / %numitems(@PlayerAlts)
   #DELNI PlayerAlts %i
-
+  
 }
 
 #IF ($Edited_Entries) {
@@ -131,4 +131,4 @@ ShowLine 100
 } $CLASS
 
 
-#CLASS 0
+#CLASS 0} _PlayerAlts#CLASS 0

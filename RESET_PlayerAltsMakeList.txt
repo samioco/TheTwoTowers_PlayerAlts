@@ -1,4 +1,4 @@
-#CLASS 0
+//RESET_PlayerAltsMakeList#CLASS 0#AL RESET_PlayerAltsMakeList {#CLASS 0
 $CLASS = "Tools|PlayerAlts"
 
 //MakeList. Can take param for adding a QuestName_FullName
@@ -20,4 +20,4 @@ $filecontents = %concat($filecontents,%CR,"#CLASS 0")
 #EXE {RESET_PlayerAltsDB}
 } $CLASS
 
-#CLASS 0
+#CLASS 0} _PlayerAlts#CLASS 0
