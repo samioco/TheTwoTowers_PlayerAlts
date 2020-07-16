@@ -1,0 +1,23 @@
+#CLASS 0
+$CLASS = "Tools|PlayerAlts"
+
+//MakeList. Can take param for adding a QuestName_FullName
+#AL PlayerAltsMakeList {
+$quotes="""
+$filecontents=""
+$filecontents_addition=""
+$location_class = "_SYSTEM_INIT|Tools_PlayerAlts"
+$filename="RESET_PlayerAltsDB"
+$filecontents=%concat("#CLASS 0",%CR,"#VAR PlayerAlts {} {} VAR")
+#IF (!@PlayerAlts) {#VAR PlayerAlts {} {} VAR}
+#FORALL %sort(@PlayerAlts) {
+  $player_entry = %i
+  $filecontents_addition=%concat("#ADDI PlayerAlts ",$quotes,$player_entry,$quotes)
+  $filecontents = %concat($filecontents,%CR,$filecontents_addition)
+}
+$filecontents = %concat($filecontents,%CR,"#CLASS 0")
+#AL RESET_PlayerAltsDB {$filecontents} $location_class
+#EXE {RESET_PlayerAltsDB}
+} $CLASS
+
+#CLASS 0
