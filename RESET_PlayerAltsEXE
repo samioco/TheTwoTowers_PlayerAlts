@@ -1,0 +1,134 @@
+#CLASS 0
+$CLASS = "Tools|PlayerAlts"
+
+#AL ShowAllAlts {
+#ECHO " "
+ShowLine 100
+#ECHO PlayerAlts:
+ShowLine 100
+#LOOP %numitems(@PlayerAlts) {
+  #ECHO %i: %item(@PlayerAlts,%i)
+}
+ShowLine 100
+} $CLASS
+
+
+#AL WhoIs {
+$param=%lower(%0)
+$player_list=""
+ShowLine 100
+#IF (!@PlayerAlts) {#VAR PlayerAlts {} {} VAR
+#ECHO Database is Already Empty!
+} {
+#FORALL @PlayerAlts {
+  #IF (%pos(%lower($param),%lower(%i))) {
+    //#ECHO Detected in list %i: %ansi(high,red)'$param'
+    #ADDI $player_list %i
+  }
+}
+#CR
+ShowLine 100
+#ECHO PlayerAlts Results for [Name] Like: %ansi(high,red)'$param'
+ShowLine 100
+$entry=""
+$formatted_name=""
+$formatted_entry=""
+#LOOP $player_list {
+  $formatted_entry=""
+  #ECHO %i: %item($player_list,%i)
+}
+ShowLine 100
+}
+} $CLASS
+
+#AL AddAlt {
+//Param: list of playernames
+$param=%0
+$found=""
+$i=0
+$player_list=""
+#ECHO " "
+ShowLine 100
+#ECHO Scanning PlayerAlts for: $param
+ShowLine 100
+#IF (!@PlayerAlts) {#VAR PlayerAlts {} {} VAR}
+#FORALL $param {#ADDI $player_list %proper(%i)}
+//Capture entries that contain any of the param list names
+#FORALL @PlayerAlts {
+  #ADD $i 1
+  //#ECHO Searching: $i/%numitems(@PlayerAlts): %i
+  #FORALL $player_list {
+    #IF (%ismember(%j,%i)) {
+      #ADDI $found $i
+      //#ECHO Found Player: %proper(%j), in entry: %i
+      #BREAK
+    }
+  }
+}
+//#ECHO Found matching entries: $found
+//Delete in reverse order, highest to lowest to maintain integrity
+//Add those names to player_list
+#FORALL %sort($found,1) {
+  #FORALL %item(@PlayerAlts,%i) {#ADDI $player_list %proper(%j)}
+  //#ECHO Deleting Item: %i / %numitems(@PlayerAlts)
+  #DELNI PlayerAlts %i
+}
+#IF ($player_list) {
+  #ECHO New Player List Created and Added: $player_list
+  #ADDI PlayerAlts $player_list
+} {#ECHO Nothing done!}
+ShowLine 100
+PlayerAltsMakeList
+} $CLASS
+
+
+#AL DelAlt {
+//Param: list of playernames
+$param=%proper(%0)
+$found=""
+$i=0
+$player_list=""
+$Edited_Entries=""
+#ECHO " "
+ShowLine 100
+#ECHO Scanning PlayerAlts for: $param
+ShowLine 100
+#IF (!@PlayerAlts) {
+  #VAR PlayerAlts {} {} VAR
+  #ECHO Database is Already Empty!
+} {
+//#FORALL $param {#ADDI $player_list %proper(%i)}
+//Capture entries that contain any of the param list names
+#FORALL @PlayerAlts {
+  #ADD $i 1
+  //#ECHO Searching: $i/%numitems(@PlayerAlts): %i
+  #IF (%ismember($param,%i)) {
+    #ADDI $found $i
+    #ECHO Found Player: %proper($param), in entry: %i
+  }
+}
+#ECHO Matching Entry #s: $found
+//Delete in reverse order, highest to lowest to maintain integrity
+//Store Player list, remove $param name, add to list of list: $Edited_Entries
+#FORALL %sort($found,1) {
+  //#FORALL %item(@PlayerAlts,%i) {#ADDI $player_list %proper(%j)}
+  $player_list=%item(@PlayerAlts,%i)
+  #ECHO Old Entry: $player_list
+  #DELI $player_list $param
+  #ECHO New Entry: $player_list
+  #ADDI $Edited_Entries $player_list
+  #ECHO Deleting Item: %i / %numitems(@PlayerAlts)
+  #DELNI PlayerAlts %i
+
+}
+
+#IF ($Edited_Entries) {
+  #ECHO Edited_Entries List Created and Added: $Edited_Entries
+  #FORALL $Edited_Entries {#ADDI PlayerAlts %i}
+} {#ECHO Specified name not found!}
+ShowLine 100
+}
+} $CLASS
+
+
+#CLASS 0
