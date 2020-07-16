@@ -1,0 +1,13 @@
+#FILE 1 "PlayerAlts_NoDupes.txt"
+#CR
+ShowLine 100
+#ECHO Adding PlayerAlts from file: "PlayerAlts_NoDupes.txt"
+ShowLine 100
+#LOOP %filesize(1) {
+  #ECHO Executing: %read(1,%i)
+  #EXE %read(1,%i)
+}
+#CLOSE 1
+ShowLine 100
+#CR
+RESET_PlayerAltsMakeList
