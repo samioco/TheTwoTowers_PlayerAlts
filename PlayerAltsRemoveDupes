@@ -1,0 +1,15 @@
+#FILE 1 "PlayerAlts_RemoveDupes.txt"
+#FILE 2 "PlayerAlts_NoMoreDupes.txt"
+#ERASE 2
+#FILE 2 "PlayerAlts_NoDupes.txt"
+$db=""
+#LOOP %filesize(1) {
+  #ADDI $db %read(1,%i)
+}
+#CLOSE 1
+$db = %dups($db)
+
+#FORALL $db {
+  #WRITE 2 %i
+}
+#CLOSE 2
